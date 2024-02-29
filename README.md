@@ -14,6 +14,6 @@ Resources for setting and describing the LDC controller (LCDC) for SH7722 and SH
 Link for interfaces in LCD Display modules – SPI, I2C, LVDS, MIPI, VX1, EDP and others \
 `https://riverdi.com/blog/interfaces-in-lcd-display-modules-spi-i2c-lvds-mipi-vx1-edp-and-others#SPI_Serial_Peripheral_Interface`
 
-### Basic Pixelated displays links
+### Links to Pixelated LCD displays
 Link to the adafruit Bright White LED Matrix \
 `https://www.adafruit.com/product/1613?gad_source=1`
