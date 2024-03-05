@@ -20,15 +20,13 @@ namespace libhal{
 
 		virtual bool read(pixel_t& pixel) override { return true; }
 		
-		virtual void setPixel(uint8_t x, uint8_t y, pixel_t pixel){
+		virtual void setPixel(uint8_t x, uint8_t y, pixel_t pixel) override {
 			frames[x * width * y] = pixel;
 		}
 
-		virtual void setPixel(uint8_t r, uint8_t g, uint8_t b){}
-
 		virtual void onUpdate() override{}
 		
-		virtual onRender() override {}
+		virtual void onRender() override {}
 
 		virtual void clear() override{}
 

@@ -45,9 +45,9 @@ namespace libhal{
 
 			virtual bool read(pixel_t& pixel) = 0;
 
-			virtual void setPixel(pixel_t pixel) = 0;
+			/* virtual void setPixel(pixel_t pixel) = 0; */
 
-			virtual void setPixel(uint8_t r, uint8_t g, uint8_t b) = 0;
+			virtual void setPixel(uint8_t x, uint8_t y, pixel_t) = 0;
 			
 			virtual void clear() = 0;
 
