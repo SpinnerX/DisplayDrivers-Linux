@@ -15,6 +15,5 @@ add_executable(
 	${PROJECT_NAME}
 	main.cpp
 	interfaces/buffer.h
-	interfaces/buffer.cpp
 )
 
