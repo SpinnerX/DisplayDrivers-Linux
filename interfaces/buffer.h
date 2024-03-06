@@ -1,73 +1,80 @@
 #pragma once
+#include <array>
 #include <cstdint>
-#include <iomanip>
+#include <iostream>
 
-namespace libhal{
-	// @note Contains raw pixel data
-	struct pixel_t{
-		uint8_t r; // @note red
-		uint8_t g; // @note green
-		uint8_t b; // @note blue
-		uint8_t a; // @note alpha - transparency
-	};
-
-	struct coord_t{
-		int x;
-		int y;
-	};
-
-	namespace interfaces{
-		
-
-		
-		/*
-		 * @class Buffer
-		 *
-		 * @note Interface class that will represent a more generic buffer.
-		 * 
-		 * @function read(pixel_t);
-		 * @note used for reading in a pixel
-		 *
-		 *
-		 *
-		 * @function onUpdate()
-		 * @param this will be used for updating each frame being displayed by the framebuffer on the display
-		 *
-		 * @function onRender()
-		 * @note used for the rendering process, or this could be the function to call when calling other rendering API's as well.
-		 *
-		 * @function clear()
-		 * @note Will refresh each frame showing the next frame,
-		 *
-		*/
-		class Buffer{
-		public:
-
-			virtual bool read(pixel_t& pixel) = 0;
-
-			/* virtual void setPixel(pixel_t pixel) = 0; */
-
-			virtual void setPixel(uint8_t x, uint8_t y, pixel_t) = 0;
-			
-			virtual void clear() = 0;
-
-			virtual void onUpdate() = 0;
-
-			virtual void onRender() = 0;
-			
-			static Buffer* read(pixel_t* data, size_t size);
-
-		protected:
-			virtual bool transcode() = 0;
-		};
-			
+struct pixel_t{
+	uint8_t r, g, b, a;
+};
 
 
-	}; // end of libhal::interfaces
+template<size_t Width, size_t Height>
+struct Framebuffer{
+
+	uint8_t* data() { return bufferData.data(); }
+
+	size_t width() const { return Width; }
+
+	size_t height() const { return Height; }
+
+	std::array<pixel_t, Width * Height> bufferData;
+};
+
+
+template<typename BufferType>
+class DisplayDriverTemplated{
+public:
+	DisplayDriverTemplated(BufferType& buffer) : buffers(&buffer){}
 	
-	// @note the idea is that the users may want to create a buffer with data or no data (meaning specifying the size)
-	// @note the Idea that I was considering was having some kind of factory/builder function that will build the kind of buffer that we wanted to instantiate our object to
-	static interfaces::Buffer* CreateBuffer(std::size_t size);
+	void draw_pixel(int x, int y, pixel_t pixel){
+		// buffers->draw(x, y, pixel);
+		/* std::cout << "Called!\n"; */
+		setCursorPosition(y, x);
+		std::cout << "\033[48;2;" << (int)pixel.r << ";" << (int)pixel.g << ";" << (int)pixel.b << "m \n"; // Set background color to RGB and output a space
+		std::cout << "\033[0m"; // Reset text formatting
+	}
 
-	static interfaces::Buffer* CreateBuffer(pixel_t* data, size_t size);
-}; // end of libhal namespace
+	void draw_line(){}
+	
+	/* void display(){} */
+
+private:
+
+	void setCursorPosition(int x, int y){
+		clearscreen();
+		std::cout << "\033[" << y << ";" << x << "H";
+	}
+
+	//Clears the screen
+	//Example: clearscreen();
+	inline void clearscreen() {
+		std::cerr << "\033[2J";
+	}
+	
+
+
+private:
+	BufferType* buffers;
+};
+
+class DisplayDriver{
+public:
+	
+	DisplayDriver(void* framebuffer);
+
+	template<int x, int y, int Width, int Height>
+	void draw_pixel(){
+		draw_pixel(x, y, Width, Height);
+	}
+
+	void display(){}
+
+private:
+	void draw_pixel(int x, int y, int Width, int Height){
+		/* std::cerr << "\033[48;2;" << pixel.r << ";" << pixel.g << ";" << pixel.b << "m"; */
+	}
+
+private:
+	/* Buffer* framebuffer; */
+	void* framebuffer = nullptr;
+};
