@@ -22,7 +22,6 @@ struct Colorbuffer{
 };
 
 struct Depthbuffer{
-	pixel_t get(int x, int y){}
 };
 
 template<size_t Width, size_t Height>
